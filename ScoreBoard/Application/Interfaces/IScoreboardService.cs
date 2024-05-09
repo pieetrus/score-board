@@ -1,4 +1,4 @@
-﻿namespace ScoreBoard.Tests
+﻿namespace ScoreBoard.Application.Interfaces
 {
     public interface IScoreboardService
     {

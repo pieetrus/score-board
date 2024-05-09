@@ -1,4 +1,8 @@
 using Moq;
+using ScoreBoard.Application.Interfaces;
+using ScoreBoard.Application.Services;
+using ScoreBoard.Domain.Interfaces;
+using Match = ScoreBoard.Domain.Models.Match;
 
 namespace ScoreBoard.Tests
 {

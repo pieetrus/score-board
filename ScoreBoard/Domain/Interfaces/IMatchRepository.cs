@@ -1,4 +1,6 @@
-﻿namespace ScoreBoard.Tests
+﻿using ScoreBoard.Domain.Models;
+
+namespace ScoreBoard.Domain.Interfaces
 {
     public interface IMatchRepository
     {
