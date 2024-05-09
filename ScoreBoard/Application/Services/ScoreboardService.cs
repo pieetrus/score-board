@@ -19,6 +19,11 @@ namespace ScoreBoard.Application.Services
             matchRepository.Remove(match);
         }
 
+        public IEnumerable<Match> GetSummary()
+        {
+            throw new NotImplementedException();
+        }
+
         public void StartMatch(string homeTeam, string awayTeam)
         {
             matchRepository.Add(Match.Create(homeTeam, awayTeam));

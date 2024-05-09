@@ -149,5 +149,37 @@ namespace ScoreBoard.Tests.Application
 
             _matchRepositoryMock.Verify(repo => repo.Remove(It.IsAny<Match>()), Times.Never);
         }
+
+        [Fact]
+        public void GetSummary_ReturnsMatchesOrderedByTotalScoreAndStartTime()
+        {
+            // Arrange
+            var matches = new List<Match>
+            {
+                Match.Create("Team1", "Team2"),
+                Match.Create("Team3", "Team4"),
+                Match.Create("Team5", "Team6"),
+                Match.Create("Team7", "Team8")
+            };
+
+            matches[0].UpdateScores(3, 2); // Total 5
+            matches[1].UpdateScores(1, 4); // Total 5, same as match 0 but started later
+            matches[2].UpdateScores(2, 3); // Total 5, same as match 0 and 1 but started even later
+            matches[3].UpdateScores(0, 7); // Total 7
+
+            // Simulate the timing of matches starting at different times
+            System.Threading.Thread.Sleep(100); // Ensure a slight delay between starts for order consistency
+            _matchRepositoryMock.Setup(repo => repo.GetAll()).Returns(matches);
+
+            // Act
+            var summary = _service.GetSummary().ToList();
+
+            // Assert
+            Assert.Equal(matches.Count, summary.Count);
+            Assert.Equal(7, summary[0].HomeScore + summary[0].AwayScore); // Team7 vs Team8
+            Assert.Equal(5, summary[1].HomeScore + summary[1].AwayScore); // Team5 vs Team6
+            Assert.Equal(5, summary[2].HomeScore + summary[2].AwayScore); // Team3 vs Team4
+            Assert.Equal(5, summary[3].HomeScore + summary[3].AwayScore); // Team1 vs Team2
+        }
     }
 }

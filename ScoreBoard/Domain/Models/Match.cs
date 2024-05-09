@@ -8,6 +8,7 @@ namespace ScoreBoard.Domain.Models
         public string AwayTeam { get; private set; }
         public int HomeScore { get; private set; }
         public int AwayScore { get; private set; }
+        public DateTime StartTime { get; private set; }  // Added to track when the match started
 
         private Match(string homeTeam, string awayTeam)
         {

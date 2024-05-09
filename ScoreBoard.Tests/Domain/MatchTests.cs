@@ -22,6 +22,18 @@ namespace ScoreBoard.Tests.Domain
             Assert.Equal(0, match.AwayScore);
         }
 
+        [Fact]
+        public void Match_Creation_SetsStartTimeToCurrentTime()
+        {
+            // Act
+            var beforeCreation = DateTime.UtcNow;
+            var match = Match.Create("HomeTeam", "AwayTeam");
+            var afterCreation = DateTime.UtcNow;
+
+            // Assert
+            Assert.True(match.StartTime >= beforeCreation && match.StartTime <= afterCreation);
+        }
+
         [Theory]
         [InlineData(null, "Away")]
         [InlineData(null, "")]
