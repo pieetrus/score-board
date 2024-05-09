@@ -32,7 +32,11 @@
 
         public void UpdateScores(int newHomeScore, int newAwayScore)
         {
-            throw new NotImplementedException();
+            if (newHomeScore < 0 || newAwayScore < 0)
+                throw new ArgumentException("Scores must be non-negative.");
+
+            HomeScore = newHomeScore;
+            AwayScore = newAwayScore;
         }
     }
 }
