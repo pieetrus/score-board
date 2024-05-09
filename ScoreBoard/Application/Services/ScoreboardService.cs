@@ -1,4 +1,5 @@
-﻿using ScoreBoard.Application.Interfaces;
+﻿using ScoreBoard.Application.Exceptions;
+using ScoreBoard.Application.Interfaces;
 using ScoreBoard.Domain.Interfaces;
 using ScoreBoard.Domain.Models;
 
@@ -11,9 +12,17 @@ namespace ScoreBoard.Application.Services
             matchRepository.Add(Match.Create(homeTeam, awayTeam));
         }
 
-        public void UpdateScores(string v1, string v2, int v3, int v4)
+        public void UpdateScores(string homeTeamName, string awayTeamName, int homeTeamScore, int awayTeamScore)
         {
-            throw new NotImplementedException();
+            var match = matchRepository.GetByTeamNames(homeTeamName, awayTeamName);
+
+            if (match is null)
+            {
+                throw new MatchNotFoundException(homeTeamName, awayTeamName);
+            }
+
+            match.UpdateScores(homeTeamScore, awayTeamScore);
+            matchRepository.Update(match);
         }
     }
 }
