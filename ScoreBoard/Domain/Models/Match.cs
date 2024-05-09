@@ -10,15 +10,16 @@ namespace ScoreBoard.Domain.Models
         public int AwayScore { get; private set; }
         public DateTime StartTime { get; private set; }  // Added to track when the match started
 
-        private Match(string homeTeam, string awayTeam)
+        private Match(string homeTeam, string awayTeam, DateTime startTime)
         {
             HomeTeam = homeTeam;
             AwayTeam = awayTeam;
             HomeScore = 0;
             AwayScore = 0;
+            StartTime = startTime;
         }
 
-        public static Match Create(string homeTeam, string awayTeam)
+        public static Match Create(string homeTeam, string awayTeam, DateTime? startTime = null)
         {
             if (string.IsNullOrEmpty(homeTeam) || string.IsNullOrEmpty(awayTeam))
             {
@@ -30,7 +31,7 @@ namespace ScoreBoard.Domain.Models
                 throw new HomeTeamCannotBeEqualToAwayTeamException();
             }
 
-            return new Match(homeTeam, awayTeam);
+            return new Match(homeTeam, awayTeam, startTime ?? DateTime.UtcNow);
         }
 
         public void UpdateScores(int newHomeScore, int newAwayScore)

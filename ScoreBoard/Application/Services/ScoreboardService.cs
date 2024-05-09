@@ -21,7 +21,10 @@ namespace ScoreBoard.Application.Services
 
         public IEnumerable<Match> GetSummary()
         {
-            throw new NotImplementedException();
+            var matches = matchRepository.GetAll();
+
+            return matches.OrderByDescending(m => m.HomeScore + m.AwayScore)
+                          .ThenByDescending(m => m.StartTime);  // Sort by most recently started
         }
 
         public void StartMatch(string homeTeam, string awayTeam)

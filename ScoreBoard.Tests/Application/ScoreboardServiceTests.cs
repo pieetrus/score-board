@@ -154,21 +154,20 @@ namespace ScoreBoard.Tests.Application
         public void GetSummary_ReturnsMatchesOrderedByTotalScoreAndStartTime()
         {
             // Arrange
+            var now = DateTime.UtcNow;
             var matches = new List<Match>
             {
-                Match.Create("Team1", "Team2"),
-                Match.Create("Team3", "Team4"),
-                Match.Create("Team5", "Team6"),
-                Match.Create("Team7", "Team8")
+                Match.Create("Team1", "Team2", now.AddHours(-4)), // Started 4 hours ago
+                Match.Create("Team3", "Team4", now.AddHours(-3)), // Started 3 hours ago
+                Match.Create("Team5", "Team6", now.AddHours(-2)), // Started 2 hours ago
+                Match.Create("Team7", "Team8", now.AddHours(-1))  // Started 1 hour ago
             };
 
             matches[0].UpdateScores(3, 2); // Total 5
-            matches[1].UpdateScores(1, 4); // Total 5, same as match 0 but started later
-            matches[2].UpdateScores(2, 3); // Total 5, same as match 0 and 1 but started even later
-            matches[3].UpdateScores(0, 7); // Total 7
+            matches[1].UpdateScores(1, 4); // Total 5, started later than match 0
+            matches[2].UpdateScores(2, 3); // Total 5, started even later
+            matches[3].UpdateScores(0, 7); // Total 7, most recent but highest score
 
-            // Simulate the timing of matches starting at different times
-            System.Threading.Thread.Sleep(100); // Ensure a slight delay between starts for order consistency
             _matchRepositoryMock.Setup(repo => repo.GetAll()).Returns(matches);
 
             // Act
