@@ -1,4 +1,6 @@
-﻿namespace ScoreBoard.Domain.Models
+﻿using ScoreBoard.Domain.Exceptions;
+
+namespace ScoreBoard.Domain.Models
 {
     public class Match
     {
@@ -19,12 +21,12 @@
         {
             if (string.IsNullOrEmpty(homeTeam) || string.IsNullOrEmpty(awayTeam))
             {
-                throw new ArgumentException("Home team and away team is required");
+                throw new TeamCannotBeNullOrEmptyException();
             }
 
             if (homeTeam.Equals(awayTeam))
             {
-                throw new ArgumentException("Home team cannot be equal to away team");
+                throw new HomeTeamCannotBeEqualToAwayTeamException();
             }
 
             return new Match(homeTeam, awayTeam);
@@ -33,7 +35,7 @@
         public void UpdateScores(int newHomeScore, int newAwayScore)
         {
             if (newHomeScore < 0 || newAwayScore < 0)
-                throw new ArgumentException("Scores must be non-negative.");
+                throw new ScoresMustBeNonNegativeException();
 
             HomeScore = newHomeScore;
             AwayScore = newAwayScore;

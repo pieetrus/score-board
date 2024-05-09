@@ -2,6 +2,7 @@ using Moq;
 using ScoreBoard.Application.Interfaces;
 using ScoreBoard.Application.Services;
 using ScoreBoard.Domain.Interfaces;
+using ScoreBoard.Shared.Exceptions;
 using Match = ScoreBoard.Domain.Models.Match;
 
 namespace ScoreBoard.Tests.Application
@@ -52,11 +53,10 @@ namespace ScoreBoard.Tests.Application
         [InlineData("Home", "")]
         [InlineData("", null)]
         [InlineData("", "Away")]
-        public void StartMatch_WithIvalidInputData_ThrowsArgumentException(string homeTeamName, string awayTeamName)
+        public void StartMatch_WithIvalidInputData_ThrowsAnyScoreBoardException(string homeTeamName, string awayTeamName)
         {
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => _service.StartMatch(homeTeamName, awayTeamName));
-            Assert.Contains("Home team and away team is required", exception.Message);
+            var exception = Assert.ThrowsAny<ScoreBoardException>(() => _service.StartMatch(homeTeamName, awayTeamName));
         }
     }
 }

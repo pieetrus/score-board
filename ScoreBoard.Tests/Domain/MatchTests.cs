@@ -1,4 +1,5 @@
-﻿using ScoreBoard.Domain.Models;
+﻿using ScoreBoard.Domain.Exceptions;
+using ScoreBoard.Domain.Models;
 
 namespace ScoreBoard.Tests.Domain
 {
@@ -30,22 +31,22 @@ namespace ScoreBoard.Tests.Domain
         [InlineData("Home", "")]
         [InlineData("", null)]
         [InlineData("", "Away")]
-        public void Create_WithIvalidInputData_ThrowsArgumentException(string homeTeamName, string awayTeamName)
+        public void Create_WithIvalidInputData_ThrowsTeamCannotBeNullOrEmptyException(string homeTeamName, string awayTeamName)
         {
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => Match.Create(homeTeamName, awayTeamName));
-            Assert.Contains("Home team and away team is required", exception.Message);
+            var exception = Assert.Throws<TeamCannotBeNullOrEmptyException>(()
+                => Match.Create(homeTeamName, awayTeamName));
         }
 
         [Fact]
-        public void Create_WithAwayTeamEqualsHomeTeam_ThrowsArgumentException()
+        public void Create_WithAwayTeamEqualsHomeTeam_ThrowsHomeTeamCannotBeEqualToAwayTeamException()
         {
             // Arrange
             var teamName = "TeamName";
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => Match.Create(teamName, teamName));
-            Assert.Contains("Home team cannot be equal to away team", exception.Message);
+            var exception = Assert.Throws<HomeTeamCannotBeEqualToAwayTeamException>(
+                () => Match.Create(teamName, teamName));
         }
 
         [Fact]
@@ -65,7 +66,7 @@ namespace ScoreBoard.Tests.Domain
         }
 
         [Fact]
-        public void UpdateScores_WithNegativeHomeScore_ThrowsArgumentException()
+        public void UpdateScores_WithNegativeHomeScore_ThrowsScoresMustBeNonNegativeException()
         {
             // Arrange
             var match = Match.Create("HomeTeam", "AwayTeam");
@@ -73,12 +74,12 @@ namespace ScoreBoard.Tests.Domain
             int newAwayScore = 1;
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => match.UpdateScores(newHomeScore, newAwayScore));
-            Assert.Contains("Scores must be non-negative", exception.Message);
+            var exception = Assert.Throws<ScoresMustBeNonNegativeException>(
+                () => match.UpdateScores(newHomeScore, newAwayScore));
         }
 
         [Fact]
-        public void UpdateScores_WithNegativeAwayScore_ThrowsArgumentException()
+        public void UpdateScores_WithNegativeAwayScore_ThrowsScoresMustBeNonNegativeException()
         {
             // Arrange
             var match = Match.Create("HomeTeam", "AwayTeam");
@@ -86,8 +87,8 @@ namespace ScoreBoard.Tests.Domain
             int newAwayScore = -1;
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => match.UpdateScores(newHomeScore, newAwayScore));
-            Assert.Contains("Scores must be non-negative", exception.Message);
+            var exception = Assert.Throws<ScoresMustBeNonNegativeException>(
+                () => match.UpdateScores(newHomeScore, newAwayScore));
         }
     }
 }
