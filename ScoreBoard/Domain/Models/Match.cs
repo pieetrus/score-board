@@ -19,19 +19,19 @@ namespace ScoreBoard.Domain.Models
             StartTime = startTime;
         }
 
-        public static Match Create(string homeTeam, string awayTeam, DateTime? startTime = null)
+        public static Match Create(string homeTeamName, string awayTeamName, DateTime? startTime = null)
         {
-            if (string.IsNullOrEmpty(homeTeam) || string.IsNullOrEmpty(awayTeam))
+            if (string.IsNullOrEmpty(homeTeamName) || string.IsNullOrEmpty(awayTeamName))
             {
                 throw new TeamCannotBeNullOrEmptyException();
             }
 
-            if (homeTeam.Equals(awayTeam))
+            if (homeTeamName.Equals(awayTeamName))
             {
                 throw new HomeTeamCannotBeEqualToAwayTeamException();
             }
 
-            return new Match(homeTeam, awayTeam, startTime ?? DateTime.UtcNow);
+            return new Match(homeTeamName, awayTeamName, startTime ?? DateTime.UtcNow);
         }
 
         public void UpdateScores(int newHomeScore, int newAwayScore)

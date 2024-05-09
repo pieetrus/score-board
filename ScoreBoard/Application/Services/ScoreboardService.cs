@@ -2,10 +2,12 @@
 using ScoreBoard.Application.Interfaces;
 using ScoreBoard.Domain.Interfaces;
 using ScoreBoard.Domain.Models;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("ScoreBoard.Tests")]
 namespace ScoreBoard.Application.Services
 {
-    public class ScoreboardService(IMatchRepository matchRepository) : IScoreboardService
+    internal sealed class ScoreboardService(IMatchRepository matchRepository) : IScoreboardService
     {
         public void FinishMatch(string homeTeamName, string awayTeamName)
         {
@@ -23,13 +25,15 @@ namespace ScoreBoard.Application.Services
         {
             var matches = matchRepository.GetAll();
 
-            return matches.OrderByDescending(m => m.HomeScore + m.AwayScore)
-                          .ThenByDescending(m => m.StartTime);  // Sort by most recently started
+            var result = matches.OrderByDescending(m => m.HomeScore + m.AwayScore)
+                .ThenByDescending(m => m.StartTime);  // Sort by most recently started
+
+            return result;
         }
 
-        public void StartMatch(string homeTeam, string awayTeam)
+        public void StartMatch(string homeTeamName, string awayTeamName)
         {
-            matchRepository.Add(Match.Create(homeTeam, awayTeam));
+            matchRepository.Add(Match.Create(homeTeamName, awayTeamName));
         }
 
         public void UpdateScores(string homeTeamName, string awayTeamName, int homeTeamScore, int awayTeamScore)

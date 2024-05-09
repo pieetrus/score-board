@@ -4,10 +4,10 @@ namespace ScoreBoard.Domain.Interfaces
 {
     public interface IMatchRepository
     {
-        void Add(Match match);
         IEnumerable<Match> GetAll();
         Match? GetByTeamNames(string teamHomeName, string teamAwayName);
-        void Remove(Match match);
+        void Add(Match match);
         void Update(Match match);
+        void Remove(Match match);
     }
 }

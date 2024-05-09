@@ -6,7 +6,7 @@ namespace ScoreBoard.Application.Interfaces
     {
         void FinishMatch(string homeTeamName, string awayTeamName);
         IEnumerable<Match> GetSummary();
-        void StartMatch(string homeTeam, string awayTeam);
+        void StartMatch(string homeTeamName, string awayTeamName);
         void UpdateScores(string homeTeamName, string awayTeamName, int homeTeamScore, int awayTeamScore);
     }
 }
