@@ -118,6 +118,23 @@ namespace ScoreBoard.Tests.Application
         }
 
         [Fact]
+        public void UpdateScores_ExtremeHighScores_ShouldNotThrowException()
+        {
+            // Arrange
+            var homeTeamName = "HomeTeam";
+            var awayTeamName = "AwayTeam";
+            var match = Match.Create(homeTeamName, awayTeamName);
+
+            _matchRepositoryMock.Setup(repo => repo.GetMatchByTeamNames(homeTeamName, awayTeamName)).Returns(match);
+
+
+            // Act & Assert
+            var exception = Record.Exception(
+                () => _service.UpdateScores(homeTeamName, awayTeamName, int.MaxValue, int.MaxValue));
+            Assert.Null(exception);
+        }
+
+        [Fact]
         public void FinishMatch_WhenMatchExists_RemovesMatchFromRepository()
         {
             // Arrange

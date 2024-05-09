@@ -34,6 +34,22 @@ namespace ScoreBoard.Tests.Domain
             Assert.True(match.StartTime >= beforeCreation && match.StartTime <= afterCreation);
         }
 
+        [Fact]
+        public void CreateMatch_WithDifferentTimeZones_ShouldHandleTimeZoneCorrectly()
+        {
+            // Arrange
+            var homeTeamName = "HomeTeam";
+            var awayTeamName = "AwayTeam";
+            var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            var localTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
+
+            // Act
+            var match = Match.Create(homeTeamName, awayTeamName, localTime);
+
+            // Assert
+            Assert.Equal(localTime, match.StartTime);
+        }
+
         [Theory]
         [InlineData(null, "Away")]
         [InlineData(null, "")]
