@@ -54,8 +54,9 @@ namespace ScoreBoard.Tests.Application
         [InlineData("", "Away")]
         public void StartMatch_WithIvalidInputData_ThrowsArgumentException(string homeTeamName, string awayTeamName)
         {
-            // Assert
-            Assert.Throws<ArgumentException>(() => _service.StartMatch(homeTeamName, awayTeamName));
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => _service.StartMatch(homeTeamName, awayTeamName));
+            Assert.Contains("Home team and away team is required", exception.Message);
         }
     }
 }

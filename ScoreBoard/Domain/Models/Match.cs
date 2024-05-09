@@ -17,14 +17,9 @@
 
         public static Match Create(string homeTeam, string awayTeam)
         {
-            if (string.IsNullOrEmpty(homeTeam))
+            if (string.IsNullOrEmpty(homeTeam) || string.IsNullOrEmpty(awayTeam))
             {
-                throw new ArgumentException("Home team is required");
-            }
-
-            if (string.IsNullOrEmpty(awayTeam))
-            {
-                throw new ArgumentException("Away team is required");
+                throw new ArgumentException("Home team and away team is required");
             }
 
             if (homeTeam.Equals(awayTeam))
@@ -33,6 +28,11 @@
             }
 
             return new Match(homeTeam, awayTeam);
+        }
+
+        public void UpdateScores(int newHomeScore, int newAwayScore)
+        {
+            throw new NotImplementedException();
         }
     }
 }
