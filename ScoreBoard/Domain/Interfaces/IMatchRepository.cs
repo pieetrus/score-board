@@ -6,6 +6,7 @@ namespace ScoreBoard.Domain.Interfaces
     {
         void Add(Match match);
         Match? GetByTeamNames(string teamHomeName, string teamAwayName);
+        void Remove(Match match);
         void Update(Match match);
     }
 }

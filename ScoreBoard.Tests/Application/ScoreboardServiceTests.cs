@@ -116,5 +116,38 @@ namespace ScoreBoard.Tests.Application
             Assert.ThrowsAny<ScoreBoardException>(
                 () => _service.UpdateScores(homeTeamName, awayTeamName, homeTeamNegativeScore, awayTeamNegativeScore));
         }
+
+        [Fact]
+        public void FinishMatch_WhenMatchExists_RemovesMatchFromRepository()
+        {
+            // Arrange
+            var homeTeamName = "HomeTeam";
+            var awayTeamName = "AwayTeam";
+
+            var match = Match.Create(homeTeamName, awayTeamName);
+            _matchRepositoryMock.Setup(repo => repo.GetByTeamNames(homeTeamName, awayTeamName)).Returns(match);
+
+            // Act
+            _service.FinishMatch(homeTeamName, awayTeamName);
+
+            // Assert
+            _matchRepositoryMock.Verify(repo => repo.Remove(match), Times.Once);
+        }
+
+        [Fact]
+        public void FinishMatch_WhenMatchDoesNotExist_ThrowsMatchNotFoundException()
+        {
+            // Arrange
+            var homeTeamName = "NonExistentHome";
+            var awayTeamName = "NonExistentAway";
+
+            _matchRepositoryMock.Setup(repo => repo.GetByTeamNames(It.IsAny<string>(), It.IsAny<string>())).Returns((Match?)null);
+
+            // Act & Assert
+            Assert.Throws<MatchNotFoundException>(
+                () => _service.FinishMatch(homeTeamName, awayTeamName));
+
+            _matchRepositoryMock.Verify(repo => repo.Remove(It.IsAny<Match>()), Times.Never);
+        }
     }
 }
