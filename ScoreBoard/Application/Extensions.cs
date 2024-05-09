@@ -11,8 +11,7 @@ namespace ScoreBoard.Application
                 HomeTeam = readModel.HomeTeam,
                 AwayTeam = readModel.AwayTeam,
                 HomeScore = readModel.HomeScore,
-                AwayScore = readModel.AwayScore,
-                StartTime = readModel.StartTime
+                AwayScore = readModel.AwayScore
             };
     }
 }
