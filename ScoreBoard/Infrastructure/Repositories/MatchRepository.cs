@@ -12,7 +12,7 @@ namespace ScoreBoard.Infrastructure.Repositories
 
         public void Add(Match match)
         {
-            if (GetByTeamNames(match.HomeTeam, match.AwayTeam) is not null)
+            if (GetMatchByTeamNames(match.HomeTeam, match.AwayTeam) is not null)
             {
                 throw new MatchBeetweenTheseTeamsAlreadyExistsException(match.HomeTeam, match.AwayTeam);
             }
@@ -22,12 +22,12 @@ namespace ScoreBoard.Infrastructure.Repositories
 
         public IEnumerable<Match> GetAll() => _matches;
 
-        public Match? GetByTeamNames(string teamHomeName, string teamAwayName)
+        public Match? GetMatchByTeamNames(string teamHomeName, string teamAwayName)
             => _matches.FirstOrDefault(m => m.HomeTeam == teamHomeName && m.AwayTeam == teamAwayName);
 
         public void Remove(Match match)
         {
-            var existingMatch = GetByTeamNames(match.HomeTeam, match.AwayTeam);
+            var existingMatch = GetMatchByTeamNames(match.HomeTeam, match.AwayTeam);
 
             if (existingMatch is null)
             {
@@ -39,7 +39,7 @@ namespace ScoreBoard.Infrastructure.Repositories
 
         public void Update(Match match)
         {
-            var existingMatch = GetByTeamNames(match.HomeTeam, match.AwayTeam);
+            var existingMatch = GetMatchByTeamNames(match.HomeTeam, match.AwayTeam);
             if (existingMatch is not null)
             {
                 existingMatch.UpdateScores(match.HomeScore, match.AwayScore);

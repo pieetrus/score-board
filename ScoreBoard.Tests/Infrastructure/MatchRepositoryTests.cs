@@ -67,7 +67,7 @@ public class MatchRepositoryTests
         _repository.Add(match);
 
         // Act
-        var foundMatch = _repository.GetByTeamNames(homeTeamName, awayTeamName);
+        var foundMatch = _repository.GetMatchByTeamNames(homeTeamName, awayTeamName);
 
         // Assert
         Assert.NotNull(foundMatch);
@@ -119,7 +119,7 @@ public class MatchRepositoryTests
         _repository.Update(match);
 
         // Assert
-        var foundMatch = _repository.GetByTeamNames(homeTeamName, awayTeamName);
+        var foundMatch = _repository.GetMatchByTeamNames(homeTeamName, awayTeamName);
         Assert.Equal(updatedHomeTeamScore, foundMatch!.HomeScore);
         Assert.Equal(updatedAwayTeamScore, foundMatch.AwayScore);
     }

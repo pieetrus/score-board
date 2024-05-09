@@ -70,7 +70,7 @@ namespace ScoreBoard.Tests.Application
             var awayTeamScore = 2;
 
             var match = Match.Create(homeTeamName, awayTeamName);
-            _matchRepositoryMock.Setup(repo => repo.GetByTeamNames(homeTeamName, awayTeamName)).Returns(match);
+            _matchRepositoryMock.Setup(repo => repo.GetMatchByTeamNames(homeTeamName, awayTeamName)).Returns(match);
 
             // Act
             _service.UpdateScores(homeTeamName, awayTeamName, homeTeamScore, awayTeamScore);
@@ -90,7 +90,7 @@ namespace ScoreBoard.Tests.Application
             var homeTeamScore = 1;
             var awayTeamScore = 1;
 
-            _matchRepositoryMock.Setup(repo => repo.GetByTeamNames(It.IsAny<string>(), It.IsAny<string>())).Returns((Match?)null);
+            _matchRepositoryMock.Setup(repo => repo.GetMatchByTeamNames(It.IsAny<string>(), It.IsAny<string>())).Returns((Match?)null);
 
             // Act & Assert
             Assert.Throws<MatchNotFoundException>(
@@ -110,7 +110,7 @@ namespace ScoreBoard.Tests.Application
             var awayTeamNegativeScore = -1;
 
             var match = Match.Create(homeTeamName, awayTeamName);
-            _matchRepositoryMock.Setup(repo => repo.GetByTeamNames(homeTeamName, awayTeamName)).Returns(match);
+            _matchRepositoryMock.Setup(repo => repo.GetMatchByTeamNames(homeTeamName, awayTeamName)).Returns(match);
 
             // Act & Assert
             Assert.ThrowsAny<ScoreBoardException>(
@@ -125,7 +125,7 @@ namespace ScoreBoard.Tests.Application
             var awayTeamName = "AwayTeam";
 
             var match = Match.Create(homeTeamName, awayTeamName);
-            _matchRepositoryMock.Setup(repo => repo.GetByTeamNames(homeTeamName, awayTeamName)).Returns(match);
+            _matchRepositoryMock.Setup(repo => repo.GetMatchByTeamNames(homeTeamName, awayTeamName)).Returns(match);
 
             // Act
             _service.FinishMatch(homeTeamName, awayTeamName);
@@ -141,7 +141,7 @@ namespace ScoreBoard.Tests.Application
             var homeTeamName = "NonExistentHome";
             var awayTeamName = "NonExistentAway";
 
-            _matchRepositoryMock.Setup(repo => repo.GetByTeamNames(It.IsAny<string>(), It.IsAny<string>())).Returns((Match?)null);
+            _matchRepositoryMock.Setup(repo => repo.GetMatchByTeamNames(It.IsAny<string>(), It.IsAny<string>())).Returns((Match?)null);
 
             // Act & Assert
             Assert.Throws<MatchNotFoundException>(
