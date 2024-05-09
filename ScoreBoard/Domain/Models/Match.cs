@@ -27,6 +27,11 @@
                 throw new ArgumentException("Away team is required");
             }
 
+            if (homeTeam.Equals(awayTeam))
+            {
+                throw new ArgumentException("Home team cannot be equal to away team");
+            }
+
             return new Match(homeTeam, awayTeam);
         }
     }

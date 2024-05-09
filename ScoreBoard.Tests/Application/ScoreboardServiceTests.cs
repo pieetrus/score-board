@@ -4,7 +4,7 @@ using ScoreBoard.Application.Services;
 using ScoreBoard.Domain.Interfaces;
 using Match = ScoreBoard.Domain.Models.Match;
 
-namespace ScoreBoard.Tests
+namespace ScoreBoard.Tests.Application
 {
     public class ScoreboardServiceTests
     {
@@ -18,7 +18,7 @@ namespace ScoreBoard.Tests
         }
 
         [Fact]
-        public void StartMatch_CreatesNewMatch()
+        public void StartMatch_WithValidInputData_CreateMatchWithValidDataAndZeroScores()
         {
             // Arrange
             var homeTeamName = "Home";
@@ -41,6 +41,21 @@ namespace ScoreBoard.Tests
             Assert.Equal(awayTeamName, createdMatch.AwayTeam);
             Assert.Equal(0, createdMatch.HomeScore);
             Assert.Equal(0, createdMatch.AwayScore);
+        }
+
+        [Theory]
+        [InlineData(null, "Away")]
+        [InlineData(null, "")]
+        [InlineData(null, null)]
+        [InlineData("", "")]
+        [InlineData("Home", null)]
+        [InlineData("Home", "")]
+        [InlineData("", null)]
+        [InlineData("", "Away")]
+        public void StartMatch_WithIvalidInputData_ThrowsArgumentException(string homeTeamName, string awayTeamName)
+        {
+            // Assert
+            Assert.Throws<ArgumentException>(() => _service.StartMatch(homeTeamName, awayTeamName));
         }
     }
 }
