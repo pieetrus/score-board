@@ -9,7 +9,14 @@ namespace ScoreBoard.Application.Services
     {
         public void FinishMatch(string homeTeamName, string awayTeamName)
         {
-            throw new NotImplementedException();
+            var match = matchRepository.GetByTeamNames(homeTeamName, awayTeamName);
+
+            if (match is null)
+            {
+                throw new MatchNotFoundException(homeTeamName, awayTeamName);
+            }
+
+            matchRepository.Remove(match);
         }
 
         public void StartMatch(string homeTeam, string awayTeam)
