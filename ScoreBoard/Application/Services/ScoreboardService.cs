@@ -10,5 +10,10 @@ namespace ScoreBoard.Application.Services
         {
             matchRepository.Add(Match.Create(homeTeam, awayTeam));
         }
+
+        public void UpdateScores(string v1, string v2, int v3, int v4)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
