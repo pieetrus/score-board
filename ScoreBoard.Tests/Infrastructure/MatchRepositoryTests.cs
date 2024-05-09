@@ -1,5 +1,6 @@
 ﻿using ScoreBoard.Domain.Interfaces;
 using ScoreBoard.Domain.Models;
+using ScoreBoard.Infrastructure.Exceptions;
 using ScoreBoard.Infrastructure.Repositories;
 
 namespace ScoreBoard.Tests.Infrastructure;
@@ -23,8 +24,19 @@ public class MatchRepositoryTests
         _repository.Add(match);
 
         // Assert
-        var allMatches = _repository.GetAll().ToList();
+        var allMatches = _repository.GetAll();
         Assert.Contains(match, allMatches);
+    }
+
+    [Fact]
+    public void Add_WhenMatchAlreadyExists_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        var match = Match.Create("HomeTeam", "AwayTeam");
+        _repository.Add(match);  // First add should succeed
+
+        // Act & Assert
+        Assert.Throws<MatchBeetweenTheseTeamsAlreadyExistsException>(() => _repository.Add(match));
     }
 
     [Fact]
@@ -78,25 +90,36 @@ public class MatchRepositoryTests
     }
 
     [Fact]
-    public void Update_UpdatesMatchInfo()
+    public void Remove_WhenMatchDoesNotExist_ThrowsInvalidOperationException()
     {
         // Arrange
-        var match = Match.Create("HomeTeam", "AwayTeam");
+        var match = Match.Create("HomeTeam", "AwayTeam");  // Not added to the repository
+
+        // Act & Assert
+        Assert.Throws<MatchDoesNotExistsException>(
+            () => _repository.Remove(match));
+    }
+
+    [Fact]
+    public void Update_UpdatesMatchScore()
+    {
+        // Arrange
+        var homeTeamName = "HomeTeam";
+        var awayTeamName = "AwayTeam";
+
+        var match = Match.Create(homeTeamName, awayTeamName);
         _repository.Add(match);
 
-        var updatedHomeTeamName = "HomeTeamUpdated";
-        var updatedAwayTeamName = "AwayTeamUpdated";
         var updatedHomeTeamScore = 3;
         var updatedAwayTeamScore = 6;
 
-        var updatedMatch = Match.Create(updatedHomeTeamName, updatedAwayTeamName);
-        updatedMatch.UpdateScores(updatedHomeTeamScore, updatedAwayTeamScore);
+        match.UpdateScores(updatedHomeTeamScore, updatedAwayTeamScore);
 
         // Act
-        _repository.Update(updatedMatch);
+        _repository.Update(match);
 
         // Assert
-        var foundMatch = _repository.GetByTeamNames(updatedHomeTeamName, updatedAwayTeamName);
+        var foundMatch = _repository.GetByTeamNames(homeTeamName, awayTeamName);
         Assert.Equal(updatedHomeTeamScore, foundMatch!.HomeScore);
         Assert.Equal(updatedAwayTeamScore, foundMatch.AwayScore);
     }
