@@ -4,7 +4,8 @@
     {
         public void StartMatch(string homeTeam, string awayTeam)
         {
-            throw new NotImplementedException();
+            var match = new Match(homeTeam, awayTeam);
+            matchRepository.Add(match);
         }
     }
 }
